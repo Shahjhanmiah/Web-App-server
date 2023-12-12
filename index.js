@@ -26,6 +26,7 @@ async function run() {
   try {
 
     const NewUserCollection = client.db('Directoryname').collection('startup');
+    const AddToyCollection = client.db('AddUsers').collection('post');
 
     
 
@@ -46,6 +47,18 @@ app.get('/startup/:id', async(req, res) => {
   const result = await NewUserCollection.findOne(query);
   res.send(result);
 })
+
+// mogobd data post 
+
+ // all toy post api  
+
+app.post('/post', async (req, res) => {
+  const newUser = req.body;
+  console.log(newUser);
+  const result = await AddToyCollection.insertOne(newUser);
+  res.send(result);
+})
+
 
  
 
