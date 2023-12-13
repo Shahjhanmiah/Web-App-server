@@ -26,14 +26,38 @@ async function run() {
   try {
 
     const NewUserCollection = client.db('Directoryname').collection('startup');
-    const AddToyCollection = client.db('AddUsers').collection('post');
+    const AddUserCollection = client.db('AddUsers').collection('post');
+    const ListUserCollection = client.db('Addlist').collection('list');
+    
 
     
 
-
   //
   app.get('/startup', async (req, res) => {
-    const cursor = NewUserCollection.find();
+    const filter  = req.query.filter || ""
+    // console.log(req.query.filter);
+    console.log(filter + "FILTER");
+    const query ={Industry:{$regex:filter,$options:"i"}}
+let cursor
+
+  if(filter !== ''){
+    cursor =await NewUserCollection.find(query);
+  }else{
+    cursor =await NewUserCollection.find();
+  }
+
+ const result = await cursor.toArray();
+console.log(result);
+
+// const filteredResult = result.filter(item => item.Industry === filter)
+
+
+
+//  console.log({filteredResult});
+ res.send(result);
+})
+  app.get('/list', async (req, res) => {
+    const cursor = ListUserCollection.find();
     const result = await cursor.toArray();
     res.send(result);
 })
@@ -55,7 +79,15 @@ app.get('/startup/:id', async(req, res) => {
 app.post('/post', async (req, res) => {
   const newUser = req.body;
   console.log(newUser);
-  const result = await AddToyCollection.insertOne(newUser);
+  const result = await AddUserCollection.insertOne(newUser);
+  res.send(result);
+})
+
+// app get user loadata 
+
+app.get('/post', async (req, res) => {
+  const cursor = AddUserCollection.find();
+  const result = await cursor.toArray();
   res.send(result);
 })
 
