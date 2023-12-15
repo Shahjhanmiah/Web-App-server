@@ -56,6 +56,16 @@ console.log(result);
 //  console.log({filteredResult});
  res.send(result);
 })
+
+
+// search  for code 
+
+
+
+
+
+
+
   app.get('/list', async (req, res) => {
     const cursor = ListUserCollection.find();
     const result = await cursor.toArray();
